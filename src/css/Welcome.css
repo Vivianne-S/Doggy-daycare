@@ -1,0 +1,48 @@
+/* Welcome page */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffe4e6, #fff, #bfdbfe);
+  padding: 2rem;
+}
+
+.welcome-content h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #db2777;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 6px rgba(219, 39, 119, 0.3);
+}
+
+.welcome-content p {
+  font-size: 1.2rem;
+  color: #374151;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+.welcome-content .highlight {
+  font-weight: bold;
+  color: #ec4899;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #ec4899;
+  color: white;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);
+}
+
+.btn:hover {
+  background: #db2777;
+  transform: scale(1.05);
+}
