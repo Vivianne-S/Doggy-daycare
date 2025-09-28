@@ -1,42 +1,66 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Reset och font */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #ffe4e6, #fff, #bfdbfe);
+  color: #333;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+nav a {
+  color: #ec4899; /* rosa */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Welcome page */
+.welcome {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px); /* minus navbar */
   text-align: center;
+  padding: 2rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.welcome-content h1 {
+  font-size: 3rem;
+  color: #db2777; /* mörkrosa */
+  margin-bottom: 1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.welcome-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.welcome-content .highlight {
+  font-weight: bold;
+  color: #ec4899;
 }
 
-.card {
-  padding: 2em;
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #ec4899;
+  color: white;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background 0.3s ease;
 }
 
-.read-the-docs {
-  color: #888;
+.btn:hover {
+  background: #db2777;
 }
