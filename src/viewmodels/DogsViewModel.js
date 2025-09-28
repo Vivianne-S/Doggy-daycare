@@ -1,44 +1,90 @@
-import { useEffect, useState, useMemo } from "react"
-import Dog from "../models/Dog"
+import { useState, useEffect, useMemo } from "react";
+import Dog from "../models/Dog";
 
 export default function useDogsViewModel() {
-  const [dogs, setDogs] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
-  const [search, setSearch] = useState("")
-  const [filters, setFilters] = useState({ breed: "", size: "", maxAge: 20 })
+  const [dogs, setDogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Filters
+  const [search, setSearch] = useState("");
+  const [selectedBreed, setSelectedBreed] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [presentOnly, setPresentOnly] = useState(false);
+  const [ageFilter, setAgeFilter] = useState(""); // young, adult, senior
+  const [ageSort, setAgeSort] = useState(""); // asc, desc
 
   useEffect(() => {
-    async function fetchDogs() {
+    const fetchDogs = async () => {
       try {
-        setLoading(true)
-        const res = await fetch(import.meta.env.VITE_API_URL)
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const data = await res.json()
-        const arr = data.record ?? []
-        setDogs(arr.map(Dog.fromJson))
-      } catch (e) {
-        setError("Kunde inte hämta hundar.")
+        const res = await fetch(import.meta.env.VITE_API_URL);
+        const data = await res.json();
+        const parsedDogs = (data.record || data).map((dog) => Dog.fromJson(dog));
+        setDogs(parsedDogs);
+      } catch (err) {
+        console.error(err);
+        setError("Kunde inte hämta hundarna 🐾");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
+    };
+
+    fetchDogs();
+  }, []);
+
+  // Raser & storlekar
+  const breeds = useMemo(() => [...new Set(dogs.map((d) => d.breed))], [dogs]);
+  const sizes = useMemo(() => [...new Set(dogs.map((d) => d.size))], [dogs]);
+
+  // Filtrerade hundar
+  const filteredDogs = useMemo(() => {
+    let list = dogs;
+
+    if (search) {
+      list = list.filter((d) =>
+        d.name.toLowerCase().includes(search.toLowerCase())
+      );
     }
-    fetchDogs()
-  }, [])
+    if (selectedBreed) list = list.filter((d) => d.breed === selectedBreed);
+    if (selectedSize) list = list.filter((d) => d.size === selectedSize);
+    if (presentOnly) list = list.filter((d) => d.present);
 
-  const breeds = useMemo(() => [...new Set(dogs.map(d => d.breed))], [dogs])
-  const sizes = useMemo(() => [...new Set(dogs.map(d => d.size))], [dogs])
-  const maxAgeInData = useMemo(() => Math.max(10, ...dogs.map(d => d.age || 0)), [dogs])
+    if (ageFilter) {
+      list = list.filter((d) => {
+        if (ageFilter === "young") return d.age < 3;
+        if (ageFilter === "adult") return d.age >= 3 && d.age <= 7;
+        if (ageFilter === "senior") return d.age > 7;
+        return true;
+      });
+    }
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    return dogs.filter(d =>
-      (!q || d.name.toLowerCase().includes(q)) &&
-      (!filters.breed || d.breed === filters.breed) &&
-      (!filters.size || d.size === filters.size) &&
-      (d.age <= filters.maxAge)
-    )
-  }, [dogs, search, filters])
+    if (ageSort) {
+      list = [...list].sort((a, b) =>
+        ageSort === "asc" ? a.age - b.age : b.age - a.age
+      );
+    }
 
-  return { dogs, filtered, breeds, sizes, maxAgeInData, loading, error, search, setSearch, filters, setFilters }
+    return list;
+  }, [dogs, search, selectedBreed, selectedSize, presentOnly, ageFilter, ageSort]);
+
+  return {
+    dogs,
+    filteredDogs,
+    loading,
+    error,
+    search,
+    setSearch,
+    breeds,
+    sizes,
+    selectedBreed,
+    setSelectedBreed,
+    selectedSize,
+    setSelectedSize,
+    presentOnly,
+    setPresentOnly,
+    ageFilter,
+    setAgeFilter,
+    ageSort,
+    setAgeSort,
+  };
 }
