@@ -1,5 +1,7 @@
 Doggy-Daycare
 
+Github Homepage: https://vivianne-s.github.io/Doggy-daycare/
+
 Doggy-Daycare is a responsive React web application built to manage and explore a daycare’s dog registry. The app allows users to search, filter, and view detailed information about each dog in a modern, user-friendly interface. The project follows the MVVM (Model-View-ViewModel) architecture, where all fetching, filtering, and sorting logic is handled inside a dedicated ViewModel for clear separation between logic and presentation.
 
 ⸻
